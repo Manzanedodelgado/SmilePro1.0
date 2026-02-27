@@ -909,22 +909,20 @@ const Agenda: React.FC<AgendaProps> = ({ activeSubArea }) => {
                                         <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Tratamiento</label>
                                         <input
                                             type="text"
-                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
                                             value={editingCita.tratamiento}
                                             onChange={e => setEditingCita({ ...editingCita, tratamiento: e.target.value })}
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Doctor</label>
-                                        <select
-                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                        <input
+                                            type="text"
+                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
                                             value={editingCita.doctor}
                                             onChange={e => setEditingCita({ ...editingCita, doctor: e.target.value })}
-                                        >
-                                            <option value="Dra. Rubio">Dra. Rubio</option>
-                                            <option value="Dr. García">Dr. García</option>
-                                            <option value="Hig. Sonia">Hig. Sonia</option>
-                                        </select>
+                                            placeholder="Dr. García, Hig. Sonia..."
+                                        />
                                     </div>
                                 </div>
 
@@ -933,22 +931,21 @@ const Agenda: React.FC<AgendaProps> = ({ activeSubArea }) => {
                                         <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Hora Inicio</label>
                                         <input
                                             type="time"
-                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
                                             value={editingCita.horaInicio}
                                             onChange={e => setEditingCita({ ...editingCita, horaInicio: e.target.value })}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Duración</label>
-                                        <select
-                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-primary focus:outline-none"
+                                        <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Duración (min)</label>
+                                        <input
+                                            type="number"
+                                            min="5"
+                                            step="5"
+                                            className="w-full bg-slate-50 border border-blue-200 rounded-lg px-3 py-2 text-[15px] font-bold text-slate-900 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
                                             value={editingCita.duracionMinutos}
-                                            onChange={e => setEditingCita({ ...editingCita, duracionMinutos: Number(e.target.value) })}
-                                        >
-                                            {[15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180].map(m => (
-                                                <option key={m} value={m}>{m} minutos</option>
-                                            ))}
-                                        </select>
+                                            onChange={e => setEditingCita({ ...editingCita, duracionMinutos: Number(e.target.value) || 15 })}
+                                        />
                                     </div>
                                 </div>
 
@@ -959,7 +956,7 @@ const Agenda: React.FC<AgendaProps> = ({ activeSubArea }) => {
                                         setCitas(prev => prev.map(c => c.id === editingCita.id ? editingCita : c));
                                         updateCita(editingCita.id, editingCita, selectedDate);
                                         setEditingCita(null);
-                                    }} className="px-5 py-2 rounded-lg text-sm font-bold text-slate-900 bg-primary hover:bg-primary/90 shadow-md shadow-primary/20 transition-all flex items-center gap-2">
+                                    }} className="px-5 py-2 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:shadow-lg hover:shadow-blue-500/20 shadow-md transition-all flex items-center gap-2">
                                         Guardar Cambios
                                     </button>
                                 </div>
