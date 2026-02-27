@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 195 10% 97%;
+        --foreground: 222.2 47% 11%;
+        --radius: 0.5rem;
+        --primary-teal: #4ccce6;
+        --accent-deep: #0e7490;
+    }
+
+    body {
+        @apply bg-clinical-soft text-slate-900 antialiased overflow-hidden h-screen w-full;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 18px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply tracking-tight font-bold;
+    }
+}
+
+@layer components {
+    .glass-panel {
+        @apply bg-white/95 backdrop-blur-sm border border-blue-200 shadow-sm;
+    }
+
+    .premium-card {
+        @apply bg-white rounded-xl shadow-sm border border-blue-200 transition-all hover:border-slate-300 hover:shadow-premium-hover;
+    }
+}
