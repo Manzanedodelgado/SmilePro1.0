@@ -50,7 +50,14 @@ export interface Paciente {
     apellidos: string;
     dni: string;
     telefono: string;
+    tel1?: string;
+    tel2?: string;
+    email?: string;
     fechaNacimiento: string;
+    direccion?: string;
+    cp?: string;
+    sexo?: string;
+    notas?: string;
     tutor?: string;
     alergias: string[];
     medicacionActual?: string;
