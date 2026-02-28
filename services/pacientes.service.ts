@@ -61,32 +61,45 @@ const pacienteToRow = (p: Partial<Paciente>): Partial<PacienteRow> => ({
 export const searchPacientes = async (query: string): Promise<Paciente[]> => {
     if (!isDbConfigured()) return [];
 
+    const selectCols = 'Nombre,Apellidos,NIF,TelMovil,Email';
+
     if (!query.trim()) {
-        // Sin query: devuelve los 30 primeros ordenados por apellidos
         const rows = await dbSelect<PacienteRow>('Pacientes', {
-            order: 'Apellidos.asc,Nombre.asc',
+            select: selectCols,
+            order: 'Nombre.asc',
             limit: '30',
         });
         return rows.map(rowToPaciente);
     }
 
-    const q = query.trim();
-    // Build a broad OR covering all searchable fields
-    const filter = [
-        `NumPac.ilike.*${q}*`,
-        `Nombre.ilike.*${q}*`,
-        `Apellidos.ilike.*${q}*`,
-        `NIF.ilike.*${q}*`,
-        `TelMovil.ilike.*${q}*`,
-        `Tel1.ilike.*${q}*`,
-        `Tel2.ilike.*${q}*`,
-    ].join(',');
+    const q = query.trim().toUpperCase();
 
-    const rows = await dbSelect<PacienteRow>('Pacientes', {
-        or: filter,
-        order: 'Apellidos.asc,Nombre.asc',
-        limit: '50',
+    // FDW (SQL Server) no soporta ilike ni or(). Buscar con like + UPPERCASE.
+    let rows = await dbSelect<PacienteRow>('Pacientes', {
+        select: selectCols,
+        Nombre: `like.*${q}*`,
+        order: 'Nombre.asc',
+        limit: '30',
     });
+
+    if (rows.length === 0) {
+        rows = await dbSelect<PacienteRow>('Pacientes', {
+            select: selectCols,
+            Apellidos: `like.*${q}*`,
+            order: 'Apellidos.asc',
+            limit: '30',
+        });
+    }
+
+    if (rows.length === 0) {
+        rows = await dbSelect<PacienteRow>('Pacientes', {
+            select: selectCols,
+            NIF: `like.*${q}*`,
+            order: 'Nombre.asc',
+            limit: '30',
+        });
+    }
+
     return rows.map(rowToPaciente);
 };
 

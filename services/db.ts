@@ -5,10 +5,12 @@
 //  Reads credentials from VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY.
 // ─────────────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const meta = import.meta as any;
-const SUPABASE_URL = (meta.env?.VITE_SUPABASE_URL as string | undefined)?.replace(/\/$/, '');
-const SUPABASE_KEY = meta.env?.VITE_SUPABASE_ANON_KEY as string | undefined;
+
+const SUPABASE_URL = (import.meta.env?.VITE_SUPABASE_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+const SUPABASE_KEY = (import.meta.env?.VITE_SUPABASE_ANON_KEY as string | undefined) ?? '';
+
+console.log('[db.ts] SUPABASE_URL:', SUPABASE_URL ? SUPABASE_URL.substring(0, 30) + '...' : '(empty)');
+console.log('[db.ts] isDbConfigured:', Boolean(SUPABASE_URL && SUPABASE_KEY));
 
 export const isDbConfigured = (): boolean =>
     Boolean(SUPABASE_URL && SUPABASE_KEY);
@@ -55,7 +57,7 @@ export const dbSelect = async <T = unknown>(
     if (!isDbConfigured()) return [];
     try {
         const qs = query
-            ? '?' + Object.entries(query).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&')
+            ? '?' + Object.entries(query).map(([k, v]) => `${k}=${v}`).join('&')
             : '';
         const res = await sbFetch(`${table}${qs}`);
         if (!res.ok) {
