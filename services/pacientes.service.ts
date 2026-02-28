@@ -8,6 +8,7 @@ import { dbSelect, dbInsert, dbUpdate, dbDelete, isDbConfigured } from './db';
 
 // Tipo interno de BD (PascalCase heredado de GELITE)
 interface PacienteRow {
+    IdPac?: number;
     NumPac?: string;
     Nombre?: string;
     Apellidos?: string;
@@ -24,7 +25,8 @@ interface PacienteRow {
 
 /** Convierte fila de BD al tipo Paciente del frontend */
 const rowToPaciente = (row: PacienteRow): Paciente => ({
-    numPac: row.NumPac ?? '',
+    numPac: row.NumPac ?? String(row.IdPac ?? ''),
+    idPac: row.IdPac,
     nombre: row.Nombre?.trim() ?? '',
     apellidos: row.Apellidos?.trim() ?? '',
     dni: row.NIF?.trim() ?? '',
@@ -66,7 +68,7 @@ const pacienteToRow = (p: Partial<Paciente>): Partial<PacienteRow> => ({
 export const searchPacientes = async (query: string): Promise<Paciente[]> => {
     if (!isDbConfigured()) return [];
 
-    const selectCols = 'NumPac,Nombre,Apellidos,NIF,Tel1,Tel2,TelMovil,Email,Direccion,CP,Notas,Sexo';
+    const selectCols = 'IdPac,NumPac,Nombre,Apellidos,NIF,Tel1,Tel2,TelMovil,Email,Direccion,CP,Notas,Sexo';
 
     if (!query.trim()) {
         const rows = await dbSelect<PacienteRow>('Pacientes', {
@@ -110,7 +112,7 @@ export const searchPacientes = async (query: string): Promise<Paciente[]> => {
 
 export const getPaciente = async (numPac: string): Promise<Paciente | null> => {
     if (!isDbConfigured()) return null;
-    const selectCols = 'NumPac,Nombre,Apellidos,NIF,Tel1,Tel2,TelMovil,Email,Direccion,CP,Notas,Sexo';
+    const selectCols = 'IdPac,NumPac,Nombre,Apellidos,NIF,Tel1,Tel2,TelMovil,Email,Direccion,CP,Notas,Sexo';
     const rows = await dbSelect<PacienteRow>('Pacientes', {
         select: selectCols,
         NumPac: `eq.${numPac}`,
